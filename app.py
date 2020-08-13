@@ -1,93 +1,82 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jun 13 02:20:31 2020
-
-@author: Krish Naik
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Fri May 15 12:50:04 2020
-
-@author: krish.naik
-"""
-
-
 import numpy as np
 import pickle
 import pandas as pd
-#from flasgger import Swagger
-import streamlit as st 
-
+import streamlit as st
+import sklearn.linear_model
 from PIL import Image
 
-#app=Flask(__name__)
-#Swagger(app)
 
-pickle_in = open("classifier.pkl","rb")
-classifier=pickle.load(pickle_in)
 
-#@app.route('/')
+pickle_in = open("linear.pkl", "rb")
+model = pickle.load(pickle_in)
+
+
+
 def welcome():
     return "Welcome All"
 
-#@app.route('/predict',methods=["Get"])
-def predict_note_authentication(variance,skewness,curtosis,entropy):
-    
-    """Let's Authenticate the Banks Note 
+
+
+def predict_life_satisfaction(GDP_country):
+    """Let's predict life satisfaction
     This is using docstrings for specifications.
     ---
-    parameters:  
-      - name: variance
+    parameters:
+      - name: GDP_country
         in: query
         type: number
         required: true
-      - name: skewness
-        in: query
-        type: number
-        required: true
-      - name: curtosis
-        in: query
-        type: number
-        required: true
-      - name: entropy
-        in: query
-        type: number
-        required: true
+
     responses:
         200:
             description: The output values
-        
-    """
-   
-    prediction=classifier.predict([[variance,skewness,curtosis,entropy]])
-    print(prediction)
-    return prediction
 
+    """
+
+    prediction = model.predict(np.array([[GDP_country]], dtype='float64'))
+    print(prediction.flatten())
+    return prediction.flatten()
 
 
 def main():
-    st.title("Bank Authenticator")
+    st.title("Life Satisfaction Predictor")
     html_temp = """
     <div style="background-color:tomato;padding:10px">
-    <h2 style="color:white;text-align:center;">Streamlit Bank Authenticator ML App </h2>
+    <h2 style="color:white;text-align:center;">Streamlit Life Satisfaction Predictor ML App </h2>
     </div>
     """
-    st.markdown(html_temp,unsafe_allow_html=True)
-    variance = st.text_input("Variance","Type Here")
-    skewness = st.text_input("skewness","Type Here")
-    curtosis = st.text_input("curtosis","Type Here")
-    entropy = st.text_input("entropy","Type Here")
-    result=""
+    st.markdown(html_temp, unsafe_allow_html=True)
+    GDP_country = st.text_input("GDP of Country", "Type Here GDP Vlaue, for eg: 22,587")
+    result = ""
     if st.button("Predict"):
-        result=predict_note_authentication(variance,skewness,curtosis,entropy)
-    st.success('The output is {}'.format(result))
+        result = predict_life_satisfaction(GDP_country)
+    st.success('Life Satisfaction is : {}'.format(result))
     if st.button("About"):
-        st.text("Lets LEarn")
-        st.text("Built with Streamlit")
+        st.text("In this app we are predicting Life Satisfaction using GDP of a particular Country")
+        st.text("Equation representing model:")
+        st.latex('lifesatisfaction = θ_0+ θ_1× GDP per capita')
+        st.latex('where : θ_0 = 4.85 , θ_1 = 4.91 × 10^-5')
+        st.text("Built with Streamlit By Nitin Rajput")
 
-if __name__=='__main__':
+    """
+    ## Table 1-1. Does money make people happier? 
+    """
+
+    df = pd.DataFrame({
+        'GDP per capita(USD)': ['12,240','27,195','37,675','50,962','55,805'],
+        'Life Satisfaction': [4.9, 5.8, 6.5, 7.4,7.2],'Country':['Hungary','Korea','France','Australia','United States']})
+
+    df.set_index('Country',inplace=True)
+
+    df
+
+    image = Image.open('plot.jpg')
+    st.image(image, caption='Scatter Plot with fitted line',use_column_width = True)
+
+
+
+
+
+
+if __name__ == '__main__':
     main()
-    
-    
-    
