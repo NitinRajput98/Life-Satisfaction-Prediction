@@ -46,7 +46,7 @@ def main():
     </div>
     """
     st.markdown(html_temp, unsafe_allow_html=True)
-    GDP_country = st.text_input("GDP of Country", "Type Here GDP Vlaue, for eg: 22,587")
+    GDP_country = st.text_input("GDP of Country", "Type Here GDP Value, for eg: 22587")
     result = ""
     if st.button("Predict"):
         result = predict_life_satisfaction(GDP_country)
