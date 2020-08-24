@@ -1,12 +1,3 @@
-# Penguins web app deployed on Heroku
+# Life-Satisfaction-Prediction
 
-The deployed web app is live at https://dp-penguins.herokuapp.com/
-
-This web app predicts the species of penguins as a function of their input parameters (bill length, bill width, flipper length, body mass, sex and island).
-
-The web app was built in Python using the following libraries:
-* streamlit
-* pandas
-* numpy
-* scikit-learn
-* pickle
+In this model we are trying to analyse , If money makes people happy? To answer this query we are going to develop a simple linear regression model that will predict the Life Index using GDP of a particular Country.  For training the model we will use Better Life Index data from the OECD’s website as well as stats about GDP per capita from the IMF’s website.
